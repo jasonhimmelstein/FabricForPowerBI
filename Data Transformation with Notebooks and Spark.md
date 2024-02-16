@@ -1,0 +1,87 @@
+# Data Transformation with Notebooks and Spark
+
+## Read **data with a** notebook
+
+Navigate to the "Fabric for Power BI Professionals" workspace, and open the "My_Lakehouse" lakehouse. Open the Files node, and the "Recent thermostat files" folder, and upload the file "2023 - September.csv" that you downloaded in the first exercise.
+
+From the ribbon, click on the "Open notebook" button and select "New notebook".
+
+Notice that the notebook is automatically connected to the lakehouse.
+
+Make sure that PySpark is the selected language in the ribbon
+
+Click on the settings icon and give the notebook a name - "Thermostat Notebook 1
+
+Click the Markdown icon (M with arrow on the right of the cell) to convert the cell from code to Markdown. Click the edit icon, delete the second line and change the content to "Using notebooks with thermostat data". The hashtag in markdown denotes a title style
+
+Hover over the bottom of the cell and select the "+" icon to add a new code cell
+
+Add the following code to the cell:
+
+```Python
+df = spark.read.load('Files/Recent thermostat files/2023 - September.csv',
+    format='csv',
+    header=True
+)
+display(df.limit(10))
+```
+
+Click the run arrow to the left of the cell. It may take several** **seconds to start the session the first time** **
+
+Hide the output by selecting the ellipsis at the bottom of the cell and selecting "Hide output"** **
+
+## Write **table** data with a notebook
+
+Examine the dataframe by adding a new cell with the following code:
+
+```Python
+df.schema
+```
+
+Note that all fields have the String data type, which does not match the table that we created in exercise 1. We cannot simply infer the schema, we must explicitly declare it when we load the file. Load the file with an explicit schema by adding a new cell with the following code:
+
+```Python
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+
+thermoSchema = StructType([
+StructField('Date', DateType()), 
+StructField('Time', TimestampType()), StructField('System_Setting', StringType()), StructField('System_Mode', StringType()), StructField('Calendar_Event', StringType()), StructField('Program_Mode', StringType()), StructField('Cool_Set_Temp', DoubleType()), StructField('Heat_Set_Temp', DoubleType()), StructField('Current_Temp', DoubleType()), StructField('Current_Humidity', IntegerType()), StructField('Outdoor_Temp', DoubleType()), StructField('Wind_Speed', IntegerType()), StructField('Cool_Stage_1', IntegerType()), StructField('Cool_Stage_2', IntegerType()), StructField('Heat_Stage_1', IntegerType()), StructField('Heat_Stage_2', IntegerType()), StructField('Aux_Heat_1', IntegerType()), 
+StructField('Fan', IntegerType()), 
+StructField('DM_Offset', DoubleType()), StructField('Thermostat_Temperature', DoubleType()), StructField('Thermostat_Humidity', IntegerType()), StructField('Thermostat_Motion', IntegerType())
+])
+
+df = spark.read.load('Files/Recent thermostat files/2023 - September.csv',
+    format='csv',
+    schema=thermoSchema,
+    header=True)
+display(df.limit(10))
+
+```
+
+Run the cell, and then run the df.schema cell again above. You'll see that the schema now matches the delta table created in exercise 1. 
+
+We now want to add the new month's data. Add** **new code cell, and enter the following code
+
+```Python
+df.write.format("delta").mode("append").save("Tables/thermostat_readings")
+```
+
+Navigate to the Power BI report created in exercise 1. Open it, and note that the new month's data has been added without any refresh steps.
+
+## Write Files data with a notebook
+
+We may want to use notebooks to simply transform data and write back to the lakehouse. Let's add the time dimension columns to the data and save it.
+
+Add a new cell to the notebook
+
+Add the following code. Tis code takes our already loaded dataframe, and adds the 4 date fields to it.** **Examine the output
+
+Add a new code cell and add** **the following code:
+
+```Python
+dfexp.write.mode("overwrite").csv('Files/transformed_thermostat/September2023')
+print ("Transformed data saved!")
+```
+
+When complete, navigate back to the lakehouse, open the Files endpoint find and view the file output.
