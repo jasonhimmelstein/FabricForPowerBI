@@ -2,7 +2,7 @@
 
 Rather than manually setting the types, or having Copilot do it for you, you can follow this side quest to add a custom Power Query step into the Applied Steps. Buyer beware... if this doesn't work for you simply revert to one of the other two methods. This will make it so that you don't have to make any changes manually. 
 
-![alt text](assets/Jason_side_quest_1.png)
+![alt text](Jason_side_quest_1.png)
 
 Copy this code:
 
@@ -39,7 +39,7 @@ in
 
 Next go to the Power Query function bar and replace what is there with the code from above and then click the check mark to the left to commit the code.
 
-![alt text](assets/Jason_side_quest_2.png)
+![alt text](Jason_side_quest_2.png)
 
 For bonus points you can right click on the "Custom" step and rename it to something like "Changed types"
 
