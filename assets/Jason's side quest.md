@@ -43,4 +43,4 @@ Next go to the Power Query function bar and replace what is there with the code 
 
 For bonus points you can right click on the "Custom" step and rename it to something like "Changed types"
 
-Return to the [Incremental transformation with DataFlow Gen 2 and Pipelines](./3.%20Incremental%20transformation%20with%20DataFlow%20Gen%202%20and%20Pipelines.md) lab already in progress.
+Return to the [Incremental transformation with DataFlow Gen 2 and Pipelines](../3.%20Incremental%20transformation%20with%20DataFlow%20Gen%202%20and%20Pipelines.md) lab already in progress.
